@@ -44,7 +44,7 @@ try:
 except IOError:
     description = None
 
-version = '0.1'
+version = '0.2'
 
 deps = []
 
@@ -58,7 +58,6 @@ setup(name='mozhttpd',
       author_email='tools@lists.mozilla.org',
       url='https://github.com/mozilla/mozbase/tree/master/mozhttpd',
       license='MPL',
-      py_modules=['mozhttpd'],
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,
