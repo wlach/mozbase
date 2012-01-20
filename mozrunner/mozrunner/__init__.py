@@ -38,3 +38,4 @@
 # ***** END LICENSE BLOCK *****
 
 from runner import *
+from remoterunner import *
