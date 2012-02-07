@@ -53,9 +53,10 @@ try:
 except (OSError, IOError):
     description = ''
 
-deps = ['mozinfo',
+deps = ['mozdevice',
+        'mozinfo',
         'mozprocess',
-        'mozprofile >= 0.1',
+        'mozprofile >= 0.1'
        ]
 
 # we only support python 2 right now
@@ -70,6 +71,7 @@ setup(name=PACKAGE_NAME,
       url='http://github.com/mozautomation/mozmill',
       license='MPL 1.1/GPL 2.0/LGPL 2.1',
       packages=find_packages(exclude=['legacy']),
+
       zip_safe=False,
       entry_points="""
           [console_scripts]

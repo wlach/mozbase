@@ -41,58 +41,54 @@ import subprocess
 import time
 from mozprofile import *
 import os.path
+from runner import Runner
 
-__all__ = [ 'RemoteFennecRunner' ]
+__all__ = [ 'FennecRunner' ]
 
-class RemoteException(Exception):
-    """exception for interacting with remote device"""
-    def __init__(self, msg = ''):
-        self.msg = msg
+class FennecRunner(Runner):
 
-    def __str__(self):
-        return self.msg
-
-class RemoteFennecRunner(object):
-    """Handles all running operations. Runs and kills the process."""
+    timeout = 3600 # Timeout of 1 hour since android fennec can be slow/unresponsive
 
     def __init__(self, devicemanager, profile, cmdargs=[], appname="org.mozilla.fennec", clean_profile=True):
+        if not appname:
+            raise Exception("Must specify appname with remote runner!")
+
         self.dm = devicemanager
-        self.appname=appname
+        self.appname = appname
         self.process = None
         self.cmdargs = cmdargs
 
-        self.profile = profile
         self.remote_profile_dir = "/".join([self.dm.getDeviceRoot(), os.path.basename(self.profile.profile)])
         self.clean_profile = clean_profile
 
-        # Setting timeout at 1 hour since on a remote device this takes much longer
-        self.timeout = 3600
+        self.timeout
 
     def is_instance_running(self):
-        """Determine if an instance (process) of fennec is (still) running"""
+        """Determine if an instance (process) of the application is running"""
         return self.dm.processExist(self.appname)
 
-    def start_instance(self, fail_if_running=False):
-        """Run an instance of fennec in the proper environment."""
+    def start_instance(self):
+        """
+        Run an instance of the program in the proper environment
+        Will throw an exception if called multiple times and an instance of the
+        program is still running
+        """
+        if self.is_instance_running():
+            raise Exception("Instance of %s already running" % self.appname)
+
         if not self.dm.pushDir(self.profile.profile, self.remote_profile_dir):
-            raise RemoteException("Couldn't copy profile directory")
+            raise Exception("Couldn't copy profile directory")
 
         fullcmd = [self.appname] + ['-profile', self.remote_profile_dir] + self.cmdargs
         self.dm.launchProcess(fullcmd, failIfRunning=fail_if_running)
 
-    def wait(self, timeout=None, outputTimeout=None):
-        """Wait for all instances of the application to exit"""
-        if not timeout:
-            timeout = self.timeout
-
-        timer = 0
-        interval = 5
-        while self.is_instance_running():
-            time.sleep(interval)
-            timer += interval
-            if (timer > timeout):
-                raise RemoteException("Timed out waiting for process to finish")
-
     def kill_all_instances(self):
-        """Kill the app"""
+        """Kills all instances of the application"""
         self.dm.killProcess(self.appname)
+
+    def reset(self):
+        """
+        reset the runner between runs
+        currently, only resets the profile, but probably should do more
+        """
+        self.profile.reset()

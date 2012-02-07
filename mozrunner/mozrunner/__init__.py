@@ -39,3 +39,4 @@
 
 from runner import *
 from remoterunner import *
+from cli import *
