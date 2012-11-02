@@ -101,8 +101,6 @@ class B2GMixin(object):
         """
         if not prefs:
             prefs = """
-user_pref("power.screen.timeout", 999999);
-user_pref("devtools.debugger.force-local", false);
             """
         #remove previous user.js if there is one
         if not self.profileDir:
