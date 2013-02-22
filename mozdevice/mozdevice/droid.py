@@ -62,6 +62,7 @@ class DroidMixin(object):
         """
         Convenience method to launch Fennec on Android with various debugging
         arguments
+
         WARNING: FIXME: This would go better in mozrunner. Please do not
         use this method if you are not comfortable with it going away sometime
         in the near future

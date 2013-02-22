@@ -1,5 +1,5 @@
-:mod:`mozb2g`
-======
+:mod:`mozb2g` --- FirefoxOS/B2G device management
+=================================================
 
 Mozb2g provides DeviceADB and DeviceSUT utility classes which can be used for testing b2g devices.
 
