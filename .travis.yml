@@ -1,0 +1,19 @@
+language: python
+python:
+  - "2.7"
+  - "2.6"
+  - "2.5"
+# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+install: python setup_development.py
+# command to run tests, e.g. python setup.py test
+script: python test.py
+notifications:
+  irc:
+    - "irc.mozilla.org#ateam"
+  email:
+    recipients:
+      - wlachance@mozilla.com
+      - auto-tools@mozilla.com
+      - wrlach@gmail.com
+    on_success: always
+    on_failure: always
